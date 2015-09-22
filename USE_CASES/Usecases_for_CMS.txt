@@ -1,0 +1,38 @@
+Use case -1:
+Screen designs in Balsemik- Paul+Naresh
+25th September
+
+Use case 0:
+Database Modelling for CMS - Paul+Naresh
+26th Spetember
+
+Use case 1:
+Add Student - Naresh
+28th Sep
+
+
+Use case 2:
+Add COurse - Paul
+30th Sep
+
+Use case 3:
+Enroll Student to COurse-Paul
+2nd Oct
+
+Use case 4:
+Award Grade-Naresh
+2nd Oct
+
+Use case 5:
+Compute GPA-Paul
+4th Oct
+
+Use case 6:
+Generate Transcript - Naresh
+6th oCt
+
+Use case 7:
+Testing all functionalities
+9th Oct
+
+Submission date- Oct 10th
