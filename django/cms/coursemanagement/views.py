@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Student, Course, Enrollement
-import simplejson
 import json
+import cgi
 # Create your views here.
+""" landing page"""
+
+def index(request):
+    return render(request, 'coursemanagement/index.html')
+
 
 """addStudent"""
 """will get a json as input format{Student_name:"name" """
@@ -18,8 +23,8 @@ def addStudent(request):
         response['status'] = 'sucess'
     else:
         response['status'] = 'failure'
-    json_data = simplejson.dumps(response)
-    return HttpResponse(json_data)
+    json_data = json.dumps(response)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """addCourse"""
@@ -34,8 +39,8 @@ def addCourse(request):
         response['status'] = 'sucess'
     else:
         response['status'] = 'failure'
-    json_data = simplejson.dumps(response)
-    return HttpResponse(json_data)
+    json_data = json.dumps(response)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """renderEnrolStudent"""
@@ -55,8 +60,8 @@ def renderEnrolStudent(request):
         Course_list.append(cs)
     enroll["Student_list"] = Student_list
     enroll["Course_list"] = Course_list
-    json_data = simplejson.dumps(enroll)
-    return HttpResponse(json_data)
+    json_data = json.dumps(enroll)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """enrollStudent"""
@@ -71,8 +76,8 @@ def enrollStudent(request):
         response['status'] = 'sucess'
     else:
         response['status'] = 'failure'
-    json_data = simplejson.dumps(response)
-    return HttpResponse(json_data)
+    json_data = json.dumps(response)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """renderawarGrade"""
@@ -92,8 +97,8 @@ def renderawardgrade(request):
         Course_list.append(cs)
     enroll["Student_list"] = Student_list
     enroll["Course_list"] = Course_list
-    json_data = simplejson.dumps(enroll)
-    return HttpResponse(json_data)
+    json_data = json.dumps(enroll)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """Awardgrade"""
@@ -110,8 +115,8 @@ def Awardgrade(request):
         response['status'] = 'sucess'
     else:
         response['status'] = 'failure'
-    json_data = simplejson.dumps(response)
-    return HttpResponse(json_data)
+    json_data = json.dumps(response)
+    return HttpResponse(json_data, content_type = "application/json")
 
 
 """computeGpa"""
@@ -151,5 +156,5 @@ def generateTranscript(request):
     transcript["Student_Name"] = student.Student_Name
     transcript["Course_list"] = Course_list
     transcript["gpa"] = student.Grade_points_avg
-    json_data = simplejson.dumps(transcript)
-    return HttpResponse(json_data)
+    json_data = json.dumps(transcript)
+    return HttpResponse(json_data, content_type = "application/json")

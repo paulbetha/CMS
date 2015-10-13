@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Course Management System</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <style>
+    .form-control{
+      width:50%;
+    }
+  </style>
+</head>
+<body align="left">
+
+<div class="container" align="left">
+  <h2>Course Management System</h2>
+  <ul class="nav nav-tabs" align="left">
+    <li class="active" align="left">
+      <a data-toggle="tab" href="#home">Home</a></li>
+    <li><a data-toggle="tab" href="#menu1">Add Student</a></li>
+    <li><a data-toggle="tab" href="#menu2">Add Course</a></li>
+    <li onclick="renderenroll()"><a data-toggle="tab" href="#menu3">Enroll Student</a></li>
+    <li onclick="renderenroll()"><a data-toggle="tab" href="#menu4" >Award Grade</a></li>
+    <li><a data-toggle="tab" href="#menu5">Compute GPA</a></li>
+    <li onclick="renderTranscript()"><a data-toggle="tab" href="#menu6">Generate Transcript</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>HOME</h3>
+      <p>Welcome to CMS. Please Browse through the options for doing operations</p>
+    </div>
+    <div id="menu1" class="tab-pane fade" align="center">
+      <h3 class="form-group">Add Student</h3>
+      <div class="form-group">
+      <input type="text" name="student_name" id="student_name" class="form-control"  placeholder="Enter Student name" ><br>
+       </div>
+      <button type="submit" name="submit" value="submit" id="submit_std" onclick="send_stddata()" class="btn btn-primary">Submit</button>
+    
+    </div>
+    <div id="menu2" class="tab-pane fade" align="center">
+      <h3 class="form-group">Add a Course</h3>
+       <input  class="form-control"   type="text" name="course_name" id="course_name"  placeholder="Enter Course name"><br>
+       <input class="form-control"  type="text" name="course_credits" id="course_credits"  placeholder="Enter Course Credits" ><br>
+      <button type="submit" class="btn btn-primary" name="submit" value="submit" id="submit_crs" onclick="send_coursedata()">Submit</button>
+    </div>
+
+
+    <div id="menu3" class="tab-pane fade" align="center">
+      <h3 class="form-group">Enroll Student to Course</h3>
+      Choose a Student:<select  placeholder="Select Student" class="form-control" id="Student_list">
+      <option value="" disabled selected>Select Student</option>
+      </select>
+      <br>                               <!-- Java script goes here to populate the names and courses from the DB-->
+      Choose a Course:<select placeholder="Select Course" class="form-control" id="Course_list">
+       <option value="" disabled selected>Select Course</option>
+      </select><br>
+      <button type="submit" name="submit" class="btn btn-primary" value="submit" onclick="send_enroldata()">Submit</button>
+    </div>
+
+<div id="menu4" class="tab-pane fade" align="center">
+      <h3 class="form-group">Award Grade</h3>
+     Choose a Student:<select placeholder="Select Student" class="form-control"  id="Student_list1">
+           <option value="" disabled selected>Select Student</option>
+      </select>
+      <br>   
+      Choose a Course:<select placeholder="Select Course" class="form-control" id="Course_list1"> 
+            <option value="" disabled selected>Select Course</option>     <!-- Java script goes here to populate the names and courses from the DB-->
+      </select><br>
+      <input  placeholder="Enter Grades" class="form-control"  type="number" name="points" min="0" max="10" id ="grade"><br><br><br><br>
+
+      <!--I've limited the range to 10 so no need of any additional JS here-->
+      
+      <button type="Submit" name="submit" class="btn btn-primary" value="submit" onclick="send_grade()">Submit</button>
+    </div>
+
+
+<div id="menu5" class="tab-pane fade" align="center">
+      <h3 class="form-group">Compute GPA</h3>
+      <p class="form-group" >Press Compute to Compute all the GPA of all students</p><br>
+      <button type="submit" class="btn btn-primary"  value="compute" onclick="compute_gpa">Compute</button> <!-- Java script goes here to compute all the GPAs and reflect in the Db-->
+
+    </div>
+
+
+    <div id="menu6" class="tab-pane fade" align="center">
+      <h3 class="form-group">Generate Transcript</h3>
+      Choose a Student:<select placeholder="Select Student" class="form-control" id="ssname">
+      <option value="" disabled selected>Select Student</option>
+      </select>                           <!-- Java script goes here to populate the name of student from DB -->
+      <br> <br><br>
+      <button type="submit" class="btn btn-primary" value="Generate" onclick="Transcript()" id="sname">Submit</button><br> <!-- Java scrit goes here for the generate function taking values from the Db-->
+      <textarea class="form-group" placeholder="Transcript is "  rows="4" cols="50"></textarea>
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+</div>
+<script> 
+      function  send_stddata() {
+           //name=document.getElementById('text_std').value;
+          var input_string = $("#student_name").val();
+          //alert(input_string);
+          var data={Student_name : input_string}
+          data = JSON.stringify(data);
+         // alert( data);
+          $.post("/addStudent", data)
+				      .done(function(data){
+					         console.log("Success:" + data);
+					         data = JSON.parse(data);
+          });
+      }
+      
+      function  send_coursedata () {
+        var course_name = $("#course_name").val();
+        var course_credits = $("#course_credits").val();
+          //alert(input_string);
+          var data={Course_name : course_name,Course_credits:course_credits }
+          data = JSON.stringify(data);
+          //alert( data);
+          $.post("/addCourse", data)
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+          });
+      }
+      function  renderenroll () {
+       var Student_list = [];
+       var Course_list = [];
+        //alert("in render");
+          $.post("/renderEnrolStudent")
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+                   Student_list=data.Student_list;
+                   Course_list=data.Course_list;
+          //         alert(Student_list);
+            //       alert(Course_list);
+                   var std1=document.getElementById("Student_list1");
+                   var crs1=document.getElementById("Course_list1");
+                   var std=document.getElementById("Student_list");
+                   var crs=document.getElementById("Course_list");
+            for (var i = 0; i <Student_list.length; i++)     { 
+                opt =document.createElement("option");
+                opt.value = Student_list[i].Student_name;
+                opt.text=Student_list[i].Student_name;
+                opt1 =document.createElement("option");
+                opt1.value = Student_list[i].Student_name;
+                opt1.text=Student_list[i].Student_name;
+                std.appendChild(opt);std1.appendChild(opt1);
+            }
+            for (var i = 0; i <Course_list.length; i++)     { 
+                opt =document.createElement("option");
+                opt.value = Course_list[i].Course_name;
+                opt.text=Course_list[i].Course_name;
+                opt1 =document.createElement("option");
+                opt1.value = Course_list[i].Course_name;
+                opt1.text=Course_list[i].Course_name;
+                crs.appendChild(opt);crs1.appendChild(opt1);
+            }
+          });
+      }
+      function  send_enroldata() {
+           //name=document.getElementById('text_std').value;
+          var Student_name = $("#Student_list option:selected").text();
+          var Course_name = $("#Course_list option:selected").text();
+          //alert(input_string);
+          var data={Student_name : Student_name, Course_name : Course_name}
+          data = JSON.stringify(data);
+          //alert( data);
+          $.post("/enrollStudent", data)
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+          });
+      }
+      function  send_grade() {
+           //name=document.getElementById('text_std').value;
+          var Student_name = $("#Student_list1 option:selected").text();
+          var Course_name = $("#Course_list1 option:selected").text();
+          var grade = $("#grade").val();
+          //alert(input_string);
+          var data={Student_name : Student_name, Course_name : Course_name,grade:grade}
+          data = JSON.stringify(data);
+          //alert( data);
+          $.post("/Awardgrade", data)
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+          });
+      }
+      function  compute_gpa() {
+        $.post("/computeGpa", data)
+      }
+      function  renderTranscript() {
+        var Student_list = [];
+        //alert("in render");
+            $.post("/rendertranscript")
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+          //         alert(data);
+                   Student_list=data.Student_list;
+                   var std=document.getElementById("ssname");
+                   for (var i = 0; i <Student_list.length; i++)     { 
+                      opt =document.createElement("option");
+                      opt.value = Student_list[i].Student_name;
+                      opt.text=Student_list[i].Student_name;
+                      std.appendChild(opt);
+            }
+          });
+      }
+      function  Transcript() {
+          var student_name = $("#ssname option:selected").text();
+          var data={Student_name : student_name}
+          data = JSON.stringify(data);
+          //alert( data);
+          $.post("/generateTranscript", data)
+              .done(function(data){
+                   console.log("Success:" + data);
+                   data = JSON.parse(data);
+          });
+      }
+</script>
+</body>
+</html>

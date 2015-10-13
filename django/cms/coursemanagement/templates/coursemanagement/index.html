@@ -1,3 +1,4 @@
+{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/coursemanagement/app1.js"></script>
 </head>
 <body align="left">
 
@@ -30,14 +32,14 @@
     </div>
     <div id="menu1" class="tab-pane fade" align="center">
       <h3>Add Student</h3>
-      <input type="text" name="student_name" ><br>
-      <input type="button" name="submit" value="submit">
+      <input type="text" name="student_name" id="text_std" ><br>
+      <input type="button" name="submit" value="submit" id="submit_std" onclick="send_stddata()">
     
     </div>
     <div id="menu2" class="tab-pane fade" align="center">
       <h3>Add a Course</h3>
-     <input type="text" name="course_name" ><br>
-      <input type="button" name="submit" value="submit">
+     <input type="text" name="course_name" id="text_crs" ><br>
+      <input type="button" name="submit" value="submit" id="submit_crs" onclick="send_coursedata()">
     </div>
 
 
@@ -92,6 +94,56 @@
 
   </div>
 </div>
+<script>
+      function  send_stddata() {
+           //name=document.getElementById('text_std').value;
+          var input_string = $("#text_std").val();
+          alert(input_string);
+          var data={Student_name : input_string}
 
+          data = JSON.stringify(data);
+          alert( data);
+                   $.post("/coursemanagement/addStudent/", data)
+				.done(function(data){
+					console.log("Success:" + data);
+					data = JSON.parse(data)
+          });
+          {% comment %}var studentData = {
+		    "Student_name" : name
+		  };
+          var student_Data = JSON.stringify(studentData);alert(student_Data);
+          var toaddrs="/coursemanagement/addStudent";var fromaddrs="send_stddata"; var data=student_Data;
+          senddata(toaddrs,fromaddrs,data);{% endcomment %}
+      }
+      function  send_coursedata () {
+         var courseData = {
+		    Course_name: document.getElementById('text_std').value
+		  };
+          // var course_Data = JSON.stringify(courseData);alert(course_Data);
+           var toaddrs="/coursemanagement/addCourse";var fromaddrs="send_coursedata"; var data=courseData;
+          senddata(toaddrs,fromaddrs,data);
+      }
+      function senddata(toaddrs,fromaddrs,data){
+          /*$.post(toaddrs, data)
+				.done(function(data){
+					console.log("Success:" + data);
+					data = JSON.parse(data)
+          });*/
+          $.ajax({
+		    type: 'POST',
+            contentType: "application/json",
+            url: toaddrs,
+		    dataType: 'json',
+		    data: data,
+		    success: function (data) {
+			console.log( JSON.stringify(data));
+		    },
+		    error: function () {
+			alert("failure");
+		    }
+		});
+
+      }
+</script>
 </body>
 </html>
